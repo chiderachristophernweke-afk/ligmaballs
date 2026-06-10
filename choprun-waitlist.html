@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chop Run — Campus Food Delivery, Uniabuja</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --coral: #E05A2B;
+      --coral-dark: #B84820;
+      --coral-light: #F9A87A;
+      --cream: #FDF6F0;
+      --cream-dark: #F0E8DF;
+      --ink: #1A1510;
+      --ink-soft: #4A3F35;
+      --ink-muted: #8A7A6E;
+      --green: #2DB87D;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 24px 40px;
+      overflow: hidden;
+    }
+
+    /* big decorative circle */
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #E05A2B22 0%, transparent 70%);
+      top: -80px;
+      right: -120px;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--coral);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      width: fit-content;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral-light);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.7);
+      }
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(44px, 12vw, 72px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    h1 .accent {
+      color: var(--coral);
+    }
+
+    h1 .line2 {
+      display: block;
+    }
+
+    .subhead {
+      font-size: clamp(16px, 4vw, 20px);
+      font-weight: 300;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      max-width: 380px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .subhead strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ── BENEFITS PILLS ── */
+    .benefits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+
+    .benefit-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1px solid var(--cream-dark);
+      border-radius: 100px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .benefit-pill .icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    /* ── FORM ── */
+    .form-wrap {
+      background: #fff;
+      border: 1px solid var(--cream-dark);
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 32px rgba(224, 90, 43, 0.08);
+      animation: fadeUp 0.5s 0.35s ease both;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .input-row {
+      position: relative;
+    }
+
+    .input-row input {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 12px;
+      padding: 14px 16px 14px 44px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .input-row input::placeholder {
+      color: var(--ink-muted);
+    }
+
+    .input-row input:focus {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 3px rgba(224, 90, 43, 0.1);
+      background: #fff;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      pointer-events: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--coral);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit:hover {
+      background: var(--coral-dark);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit .btn-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .form-note {
+      font-size: 11px;
+      color: var(--ink-muted);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: #E8F9F2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .success-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .success-sub {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .success-count {
+      background: var(--coral);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── SOCIAL PROOF ── */
+    .social-proof {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      animation: fadeUp 0.5s 0.45s ease both;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--cream);
+      margin-right: -10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream-dark);
+    }
+
+    .avatar:nth-child(1) {
+      background: #FFDDD0;
+    }
+
+    .avatar:nth-child(2) {
+      background: #D0F0E4;
+    }
+
+    .avatar:nth-child(3) {
+      background: #D0E4F0;
+    }
+
+    .avatar:nth-child(4) {
+      background: #F0D0F0;
+    }
+
+    .social-text {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .social-text strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 60px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-eyebrow {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 7vw, 40px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      color: var(--ink);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 48px;
+      bottom: -20px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--cream-dark), transparent);
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--coral);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .step-body {
+      padding-bottom: 32px;
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer strong {
+      color: var(--coral);
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── COUNTER ANIMATION ── */
+    #live-count {
+      font-weight: 700;
+      color: var(--coral);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+
+    <div class="badge">
+      <div class="badge-dot"></div>
+      Coming to Uniabuja
+    </div>
+
+    <h1>
+      Hungry?<br>
+      <span class="line2">We <span class="accent">Run</span> so<br>you don't have to.</span>
+    </h1>
+
+    <p class="subhead">
+      Order from your favourite campus restaurants and get it delivered <strong>straight to you</strong> — no queue, no
+      keke, no stress.
+    </p>
+
+    <div class="benefits">
+      <div class="benefit-pill"><span class="icon">🆓</span> Free delivery at launch</div>
+      <div class="benefit-pill"><span class="icon">⚡</span> Under 15 mins</div>
+      <div class="benefit-pill"><span class="icon">📍</span> Campus-only</div>
+    </div>
+
+    <div class="form-wrap" id="student-form-wrap">
+      <span class="form-label">Join the waitlist — be first to order 🔥</span>
+      <div class="form-fields" id="form-fields">
+        <div class="input-group">
+          <div class="input-row">
+            <span class="input-icon">👤</span>
+            <input type="text" id="name" placeholder="Your name" autocomplete="given-name">
+          </div>
+          <div class="input-row">
+            <span class="input-icon">📱</span>
+            <input type="tel" id="whatsapp" placeholder="WhatsApp number (e.g. 0812...)" autocomplete="tel">
+          </div>
+          <div class="input-row">
+            <span class="input-icon">🏠</span>
+            <input type="text" id="dept" placeholder="Department / Faculty (optional)">
+          </div>
+        </div>
+        <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">
+          <span class="btn-inner" id="btn-text">
+            Get Early Access — It's Free
+            <span>→</span>
+          </span>
+        </button>
+        <p class="form-note">No spam. We'll only message you when Chop Run goes live.<br>Your number is safe with us.
+        </p>
+      </div>
+
+      <div class="success-state" id="success-state">
+        <div class="success-icon">✅</div>
+        <div class="success-title">You're on the list!</div>
+        <div class="success-sub">We'll WhatsApp you the moment Chop Run goes live on campus. Free delivery on your first
+          order — guaranteed.</div>
+        <div class="success-count" id="position-text">You're #<span id="position">...</span> on the waitlist</div>
+      </div>
+    </div>
+
+    <div class="social-proof">
+      <div class="avatars">
+        <div class="avatar">😊</div>
+        <div class="avatar">🙂</div>
+        <div class="avatar">😄</div>
+        <div class="avatar">😁</div>
+      </div>
+      <div class="social-text">
+        <strong><span id="live-count">47</span> students</strong> already on the waitlist
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how-section">
+    <p class="section-eyebrow">How it works</p>
+    <h2 class="section-title">Three steps.<br>That's it.</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open Chop Run</div>
+          <div class="step-desc">Browse real menus from campus restaurants — with prices, photos, and owner faces you
+            already know.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Place your order</div>
+          <div class="step-desc">Pick what you want, pay securely. Your order goes straight to the restaurant — no
+            middleman confusion.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">We run to you</div>
+          <div class="step-desc">A verified campus rider picks it up sealed and delivers it to your exact location in
+            under 15 minutes. You track it live.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <strong>Chop Run</strong> · University of Abuja · 2025<br>
+    <span style="margin-top:4px;display:block">Order. Run. Done.</span>
+  </footer>
+
+  <script>
+    // ── WEBHOOK CONFIG ── 
+    // 🔴 REPLACE THIS with your actual n8n webhook URL
+    const WEBHOOK_URL = 'https://YOUR-N8N-INSTANCE.app.n8n.cloud/webhook/choprun-waitlist';
+
+    // Simulate live count that ticks up slowly
+    let count = 47;
+    const countEl = document.getElementById('live-count');
+
+    function tickCount() {
+      const add = Math.random() < 0.3 ? 1 : 0;
+      count += add;
+      countEl.textContent = count;
+      setTimeout(tickCount, Math.random() * 8000 + 4000);
+    }
+    setTimeout(tickCount, 3000);
+
+    // Customer waitlist form
+    async function handleSubmit() {
+      const name = document.getElementById('name').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+      const dept = document.getElementById('dept').value.trim();
+
+      if (!name) { shake('name'); return; }
+      if (!whatsapp || whatsapp.length < 10) { shake('whatsapp'); return; }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      document.getElementById('btn-text').innerHTML = '<span>Joining...</span>';
+
+      try {
+        // Send data to n8n webhook → saves to spreadsheet
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            whatsapp: whatsapp,
+            department: dept,
+            timestamp: new Date().toISOString(),
+            source: 'choprun-waitlist'
+          })
+        });
+
+        if (!response.ok) throw new Error('Webhook failed');
+      } catch (err) {
+        // Still show success to user even if webhook fails
+        // (data can be retried / you can add error logging here)
+        console.warn('Webhook error (data may not have saved):', err);
+      }
+
+      // Show success state
+      document.getElementById('form-fields').style.display = 'none';
+      const ss = document.getElementById('success-state');
+      ss.style.display = 'flex';
+      count++;
+      countEl.textContent = count;
+      document.getElementById('position').textContent = count;
+    }
+
+    function shake(id) {
+      const el = document.getElementById(id);
+      el.style.borderColor = '#E05A2B';
+      el.style.animation = 'shake 0.3s ease';
+      el.focus();
+      setTimeout(() => { el.style.animation = ''; }, 400);
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleSubmit();
+    });
+
+    // Shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+  `;
+    document.head.appendChild(style);
+  </script>
+
+</body>
+
+</html>
